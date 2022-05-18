@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameController : MonoBehaviour
 {
     [SerializeField] private List<ButtonScript> buttonScripts;
     [SerializeField] private int speed = 1;
+    private List<Transform> slaveElement;
+    [SerializeField] private Transform leader;
     private float time = 1;
-    public Transform positionObject;
-    int dir = 0;
+    private MoveState MovementState = MoveState.MoveUp;
+
+    private enum MoveState
+    {
+        MoveUp = 0,
+        MoveDown = 1,
+        MoveLeft = 2,
+        MoveRight =3
+    }
     
     void Start()
     {
-        
         for (int i = 0;  i < buttonScripts.Count;  i++)
         {
             var id = i;
@@ -28,36 +37,44 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            Move(dir);
+            Move();
             time = 1;
         }
     }
 
     void Direction(int dir)
     {
-        this.dir = dir;
-    }
-    
-    
-    private void Move(int direction)
-    {
-        var position = positionObject.localPosition;
-
-        switch (direction)
-        {
-            case 0:
-                positionObject.localPosition = new Vector3(position.x, position.y + 100f);
-                break;
-            case 1:
-                positionObject.localPosition = new Vector3(position.x, position.y - 100f); 
-                break;
-            case 2:
-                positionObject.localPosition = new Vector3(position.x - 100f, position.y);
-                break;
-            case 3:
-                positionObject.localPosition = new Vector3(position.x + 100f, position.y);
-                break;
-        }
         
     }
+
+    private Vector3 GetDirection()
+    {
+        var position = leader.localPosition;
+        
+        switch (MovementState)
+        {
+            case MoveState.MoveUp:
+                    return new Vector3(position.x, position.y + 100f);
+                    
+            case MoveState.MoveDown:
+                    return new Vector3(position.x, position.y - 100f);
+                    
+            case MoveState.MoveLeft:
+                    return new Vector3(position.x - 100f, position.y);
+            
+            case MoveState.MoveRight:
+                    return new Vector3(position.x + 100f, position.y);
+        }
+        return new Vector3();
+    }
+    
+    // private void Move()
+    // {
+    //     var position = leader.localPosition;
+    //     
+    //     leader.localPosition = GetDirection();
+    //     
+    //    
+    //     
+    // }
 }
