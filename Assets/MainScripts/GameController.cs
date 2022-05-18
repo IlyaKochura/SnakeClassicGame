@@ -4,18 +4,22 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField] private List<ButtonScript> buttonScripts;
+    [SerializeField] private int speed = 1;
     private float time = 1;
-
-    private int speed = 1;
-
-    public Transform aaa;
-    // Start is called before the first frame update
+    public Transform positionObject;
+    int dir = 0;
+    
     void Start()
     {
         
+        for (int i = 0;  i < buttonScripts.Count;  i++)
+        {
+            var id = i;
+            buttonScripts[i].click = () => Direction(id);
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (time > 0)
@@ -24,14 +28,36 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            Move();
+            Move(dir);
             time = 1;
         }
     }
 
-    private void Move()
+    void Direction(int dir)
     {
-        var r = aaa.localPosition;
-        aaa.localPosition = new Vector3(0, r.y - 100f);
+        this.dir = dir;
+    }
+    
+    
+    private void Move(int direction)
+    {
+        var position = positionObject.localPosition;
+
+        switch (direction)
+        {
+            case 0:
+                positionObject.localPosition = new Vector3(position.x, position.y + 100f);
+                break;
+            case 1:
+                positionObject.localPosition = new Vector3(position.x, position.y - 100f); 
+                break;
+            case 2:
+                positionObject.localPosition = new Vector3(position.x - 100f, position.y);
+                break;
+            case 3:
+                positionObject.localPosition = new Vector3(position.x + 100f, position.y);
+                break;
+        }
+        
     }
 }
