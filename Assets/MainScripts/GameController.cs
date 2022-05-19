@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,10 +15,10 @@ public class GameController : MonoBehaviour
 
     private enum MoveState
     {
-        MoveUp = 0,
-        MoveDown = 1,
-        MoveLeft = 2,
-        MoveRight =3
+        MoveUp,
+        MoveDown,
+        MoveLeft,
+        MoveRight
     }
     
     void Start()
@@ -44,7 +45,9 @@ public class GameController : MonoBehaviour
 
     void Direction(int dir)
     {
-        
+        var i = (MoveState) dir;
+        MovementState = i;
+        Debug.Log(i);
     }
 
     private Vector3 GetDirection()
@@ -68,13 +71,13 @@ public class GameController : MonoBehaviour
         return new Vector3();
     }
     
-    // private void Move()
-    // {
-    //     var position = leader.localPosition;
-    //     
-    //     leader.localPosition = GetDirection();
-    //     
-    //    
-    //     
-    // }
+    private void Move()
+    {
+        var position = leader.localPosition;
+        
+        leader.localPosition = GetDirection();
+        
+       
+        
+    }
 }
