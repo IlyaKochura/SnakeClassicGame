@@ -1,14 +1,11 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class GameController : MonoBehaviour
 {
     [SerializeField] private List<ButtonScript> buttonScripts;
     [SerializeField] private int speed = 1;
-    private List<Transform> slaveElement;
+    [SerializeField] private List<Transform> slaveElement;
     [SerializeField] private Transform leader;
     private float time = 1;
     private MoveState MovementState = MoveState.MoveUp;
@@ -29,7 +26,7 @@ public class GameController : MonoBehaviour
             buttonScripts[i].click = () => Direction(id);
         }
     }
-
+    
     void Update()
     {
         if (time > 0)
@@ -47,7 +44,6 @@ public class GameController : MonoBehaviour
     {
         var i = (MoveState) dir;
         MovementState = i;
-        Debug.Log(i);
     }
 
     private Vector3 GetDirection()
@@ -74,10 +70,13 @@ public class GameController : MonoBehaviour
     private void Move()
     {
         var position = leader.localPosition;
-        
         leader.localPosition = GetDirection();
-        
-       
-        
     }
 }
+
+
+// for (int i = 0;  i < buttonScripts.Count;  i++)
+// {
+//     var id = i;
+//     buttonScripts[i].click = () => Direction(id);
+// }
