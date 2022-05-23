@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 namespace MainScripts
@@ -41,6 +40,7 @@ namespace MainScripts
             else
             {
                 Move();
+                //SlaveMove();
                 _time = 1;
             }
         }
@@ -106,18 +106,24 @@ namespace MainScripts
 
         private void Move()
         {
+            var pos = leader.localPosition;
             leader.localPosition = GetDirection();
+            foreach (var element in slaveElement)
+            {
+                var newLoc = element.localPosition;
+                element.localPosition = pos;
+                pos = newLoc;
+            }
+            
         }
 
         private void SlaveMove()
         {
-
+            for (int i = slaveElement.Count; i > 0; i--)
+            {
+                var position = slaveElement[i - 1].localPosition;
+                slaveElement[i].transform.position = new Vector3(position.x, position.y);
+            }
         }
     }
 }
-
-// for (int i = 0;  i < buttonScripts.Count;  i++)
-// {
-//     var id = i;
-//     buttonScripts[i].click = () => Direction(id);
-// }
