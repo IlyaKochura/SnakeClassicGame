@@ -8,10 +8,10 @@ namespace MainScripts
     {
         [SerializeField] private List<ButtonScript> buttonScripts;
         [SerializeField] private int speed = 1;
-        [SerializeField] private List<Transform> slaveElement;
+        [SerializeField] private List<GameObject> slaveElement;
         [SerializeField] private Transform leader;
         [SerializeField] private float stepLength;
-        [SerializeField] private GameObject endGameTitle;
+        // [SerializeField] private GameObject endGameTitle;
         [SerializeField] private GameObject eat;
         [SerializeField] private GameObject bodyPrefab;
         private float _time = 1;
@@ -43,7 +43,8 @@ namespace MainScripts
             else
             {
                 Move();
-                CheckMySelfEat();
+                // CheckMySelfEat();
+                AddBody();
                 _time = 1;
             }
         }
@@ -84,23 +85,25 @@ namespace MainScripts
             _movementState = i;
         }
 
-        private void CheckMySelfEat()
-        {
-            for (int i = 0; i < slaveElement.Count; i++)
-            {
-                if (leader.localPosition == slaveElement[i].localPosition)
-                {
-                    endGameTitle.SetActive(true);
-                    Debug.Break();
-                }   
-            }
-        }
+        // private void CheckMySelfEat()
+        // {
+        //     for (int i = 0; i < slaveElement.Count; i++)
+        //     {
+        //         if (leader.localPosition == slaveElement[i].transform.localPosition)
+        //         {
+        //             endGameTitle.SetActive(true);
+        //             Debug.Break();
+        //         }   
+        //     }
+        // }
 
         private void AddBody()
         {
+            var bodyElement = Instantiate(bodyPrefab, leader.transform);
+            
             if (leader.localPosition == eat.transform.localPosition)
             {
-                slaveElement.Add();
+                slaveElement.Add(bodyElement);
             }
         }
         
@@ -133,8 +136,8 @@ namespace MainScripts
             leader.localPosition = GetDirection();
             foreach (var element in slaveElement)
             {
-                var newLoc = element.localPosition;
-                element.localPosition = pos;
+                var newLoc = element.transform.localPosition;
+                element.transform.localPosition = pos;
                 pos = newLoc;
             }
             
