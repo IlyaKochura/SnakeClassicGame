@@ -11,6 +11,9 @@ namespace MainScripts
         [SerializeField] private List<Transform> slaveElement;
         [SerializeField] private Transform leader;
         [SerializeField] private float stepLength;
+        [SerializeField] private GameObject endGameTitle;
+        [SerializeField] private GameObject eat;
+        [SerializeField] private GameObject bodyPrefab;
         private float _time = 1;
         private MoveState _movementState = MoveState.MoveUp;
 
@@ -40,7 +43,7 @@ namespace MainScripts
             else
             {
                 Move();
-                //SlaveMove();
+                CheckMySelfEat();
                 _time = 1;
             }
         }
@@ -81,6 +84,26 @@ namespace MainScripts
             _movementState = i;
         }
 
+        private void CheckMySelfEat()
+        {
+            for (int i = 0; i < slaveElement.Count; i++)
+            {
+                if (leader.localPosition == slaveElement[i].localPosition)
+                {
+                    endGameTitle.SetActive(true);
+                    Debug.Break();
+                }   
+            }
+        }
+
+        private void AddBody()
+        {
+            if (leader.localPosition == eat.transform.localPosition)
+            {
+                slaveElement.Add();
+            }
+        }
+        
         private Vector3 GetDirection()
         {
             var position = leader.localPosition;
@@ -115,15 +138,6 @@ namespace MainScripts
                 pos = newLoc;
             }
             
-        }
-
-        private void SlaveMove()
-        {
-            for (int i = slaveElement.Count; i > 0; i--)
-            {
-                var position = slaveElement[i - 1].localPosition;
-                slaveElement[i].transform.position = new Vector3(position.x, position.y);
-            }
         }
     }
 }
