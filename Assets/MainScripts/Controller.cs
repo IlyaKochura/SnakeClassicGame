@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = System.Random;
 
 namespace MainScripts
@@ -34,6 +35,8 @@ namespace MainScripts
                 var id = i;
                 buttonScripts[i].click = () => Direction(id);
             }
+
+            buttonScripts[4].click = () => Restart();
         }
 
         void Update()
@@ -94,8 +97,8 @@ namespace MainScripts
             {
                 if (leader.localPosition == slaveElement[i].transform.localPosition)
                 {
-                    // endGameTitle.SetActive(true);
-                    Debug.Break();
+                    endGameTitle.SetActive(true);
+                    Time.timeScale = 0;
                 }   
             }
             
@@ -151,6 +154,36 @@ namespace MainScripts
                 pos = newLoc;
             }
             AddBodyAndEat(pos);
+            MovingEdgesScene();
+        }
+
+        private void Restart()
+        {
+            SceneManager.LoadScene(0);
+            Time.timeScale = 1;
+        }
+
+        private void MovingEdgesScene()
+        {
+            if (leader.localPosition.y > 600)
+            {
+                leader.localPosition = new Vector3(leader.localPosition.x, -600, 0);
+            }
+
+            if (leader.localPosition.y < -600)
+            {
+                leader.localPosition = new Vector3(leader.localPosition.x, 600, 0);
+            }
+
+            if (leader.localPosition.x < -800)
+            {
+                leader.localPosition = new Vector3(1300, leader.localPosition.y, 0);
+            }
+            
+            if (leader.localPosition.x > 1300)
+            {
+                leader.localPosition = new Vector3(-800, leader.localPosition.y, 0);
+            }
         }
     }
 }
