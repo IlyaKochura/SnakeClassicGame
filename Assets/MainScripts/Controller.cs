@@ -43,7 +43,6 @@ namespace MainScripts
             else
             {
                 Move();
-                CheckMySelfEat();
                 _time = 1;
             }
         }
@@ -84,26 +83,6 @@ namespace MainScripts
             _movementState = i;
         }
 
-        private void CheckMySelfEat()
-        {
-            for (int i = 0; i < slaveElement.Count; i++)
-            {
-                if (leader.localPosition == slaveElement[i].localPosition)
-                {
-                    endGameTitle.SetActive(true);
-                    Debug.Break();
-                }   
-            }
-        }
-
-        // private void AddBody()
-        // {
-        //     if (leader.localPosition == eat.transform.localPosition)
-        //     {
-        //         slaveElement.Add();
-        //     }
-        // }
-        
         private Vector3 GetDirection()
         {
             var position = leader.localPosition;
