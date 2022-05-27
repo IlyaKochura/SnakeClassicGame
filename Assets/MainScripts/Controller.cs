@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Random = System.Random;
 
 namespace MainScripts
@@ -17,6 +18,7 @@ namespace MainScripts
         [SerializeField] private GameObject eat;
         [SerializeField] private GameObject bodyPrefab;
         [SerializeField] private Transform leaderBodySpawn;
+        [SerializeField] private Text score;
         private float _time = 1;
         private MoveState _movementState = MoveState.MoveUp;
 
@@ -110,6 +112,8 @@ namespace MainScripts
 
                 MoveEatAfterAdd();
             }
+            
+            score.text = Convert.ToString(slaveElement.Count);
         }
         
         private Vector3 GetDirection()
