@@ -96,13 +96,13 @@ namespace MainScripts
             }
         }
 
-        private void AddBody()
-        {
-            if (leader.localPosition == eat.transform.localPosition)
-            {
-                slaveElement.Add();
-            }
-        }
+        // private void AddBody()
+        // {
+        //     if (leader.localPosition == eat.transform.localPosition)
+        //     {
+        //         slaveElement.Add();
+        //     }
+        // }
         
         private Vector3 GetDirection()
         {
