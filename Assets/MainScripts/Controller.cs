@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 namespace MainScripts
 {
@@ -44,7 +45,6 @@ namespace MainScripts
             else
             {
                 Move();
-                AddBody();
                 _time = 1;
             }
         }
@@ -87,7 +87,7 @@ namespace MainScripts
 
         
 
-        private void AddBody()
+        private void AddBodyAndEat(Vector3 position)
         {
             
             for (int i = 0; i < slaveElement.Count; i++)
@@ -99,11 +99,13 @@ namespace MainScripts
                 }   
             }
             
-            
             if (leader.localPosition == eat.transform.localPosition)
             {
                 var bodyElement = Instantiate(bodyPrefab, leaderBodySpawn);
                 slaveElement.Add(bodyElement);
+                bodyElement.transform.localPosition = position;
+
+                MoveEatAfterAdd();
             }
         }
         
@@ -114,7 +116,6 @@ namespace MainScripts
             switch (_movementState)
             {
                 case MoveState.MoveUp:
-                    
                     return new Vector3(position.x, position.y + stepLength);
 
                 case MoveState.MoveDown:
@@ -130,6 +131,15 @@ namespace MainScripts
             return new Vector3();
         }
 
+        private void MoveEatAfterAdd()
+        {
+            Random rnd = new Random();
+            var posY = rnd.Next(-6, 6);
+            var posX = rnd.Next(-8, 13);
+
+            eat.transform.localPosition = new Vector3(posX * 100, posY * 100, 0);
+        }
+        
         private void Move()
         {
             var pos = leader.localPosition;
@@ -140,6 +150,7 @@ namespace MainScripts
                 element.transform.localPosition = pos;
                 pos = newLoc;
             }
+            AddBodyAndEat(pos);
         }
     }
 }
