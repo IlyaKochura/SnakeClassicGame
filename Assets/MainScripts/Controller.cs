@@ -111,8 +111,6 @@ namespace MainScripts
         {
             var position = leader.localPosition;
             
-            Debug.LogError(_movementState);
-            
             switch (_movementState)
             {
                 case MoveState.MoveUp:
@@ -142,8 +140,6 @@ namespace MainScripts
                 element.transform.localPosition = pos;
                 pos = newLoc;
             }
-            
-            Debug.LogError("Сработал");
         }
     }
 }
