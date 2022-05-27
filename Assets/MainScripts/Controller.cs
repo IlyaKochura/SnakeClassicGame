@@ -11,9 +11,10 @@ namespace MainScripts
         [SerializeField] private List<GameObject> slaveElement;
         [SerializeField] private Transform leader;
         [SerializeField] private float stepLength;
-        // [SerializeField] private GameObject endGameTitle;
+        [SerializeField] private GameObject endGameTitle;
         [SerializeField] private GameObject eat;
         [SerializeField] private GameObject bodyPrefab;
+        [SerializeField] private Transform leaderBodySpawn;
         private float _time = 1;
         private MoveState _movementState = MoveState.MoveUp;
 
@@ -43,7 +44,6 @@ namespace MainScripts
             else
             {
                 Move();
-                // CheckMySelfEat();
                 AddBody();
                 _time = 1;
             }
@@ -85,24 +85,24 @@ namespace MainScripts
             _movementState = i;
         }
 
-        // private void CheckMySelfEat()
-        // {
-        //     for (int i = 0; i < slaveElement.Count; i++)
-        //     {
-        //         if (leader.localPosition == slaveElement[i].transform.localPosition)
-        //         {
-        //             endGameTitle.SetActive(true);
-        //             Debug.Break();
-        //         }   
-        //     }
-        // }
+        
 
         private void AddBody()
         {
-            var bodyElement = Instantiate(bodyPrefab, leader.transform);
+            
+            for (int i = 0; i < slaveElement.Count; i++)
+            {
+                if (leader.localPosition == slaveElement[i].transform.localPosition)
+                {
+                    // endGameTitle.SetActive(true);
+                    Debug.Break();
+                }   
+            }
+            
             
             if (leader.localPosition == eat.transform.localPosition)
             {
+                var bodyElement = Instantiate(bodyPrefab, leaderBodySpawn);
                 slaveElement.Add(bodyElement);
             }
         }
@@ -110,7 +110,9 @@ namespace MainScripts
         private Vector3 GetDirection()
         {
             var position = leader.localPosition;
-
+            
+            Debug.LogError(_movementState);
+            
             switch (_movementState)
             {
                 case MoveState.MoveUp:
@@ -141,6 +143,7 @@ namespace MainScripts
                 pos = newLoc;
             }
             
+            Debug.LogError("Сработал");
         }
     }
 }
