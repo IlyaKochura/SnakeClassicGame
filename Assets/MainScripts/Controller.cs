@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 namespace MainScripts
 {
@@ -8,12 +9,13 @@ namespace MainScripts
     {
         [SerializeField] private List<ButtonScript> buttonScripts;
         [SerializeField] private int speed = 1;
-        [SerializeField] private List<Transform> slaveElement;
+        [SerializeField] private List<GameObject> slaveElement;
         [SerializeField] private Transform leader;
         [SerializeField] private float stepLength;
         [SerializeField] private GameObject endGameTitle;
         [SerializeField] private GameObject eat;
         [SerializeField] private GameObject bodyPrefab;
+        [SerializeField] private Transform leaderBodySpawn;
         private float _time = 1;
         private MoveState _movementState = MoveState.MoveUp;
 
@@ -83,14 +85,37 @@ namespace MainScripts
             _movementState = i;
         }
 
+        
+
+        private void AddBodyAndEat(Vector3 position)
+        {
+            
+            for (int i = 0; i < slaveElement.Count; i++)
+            {
+                if (leader.localPosition == slaveElement[i].transform.localPosition)
+                {
+                    // endGameTitle.SetActive(true);
+                    Debug.Break();
+                }   
+            }
+            
+            if (leader.localPosition == eat.transform.localPosition)
+            {
+                var bodyElement = Instantiate(bodyPrefab, leaderBodySpawn);
+                slaveElement.Add(bodyElement);
+                bodyElement.transform.localPosition = position;
+
+                MoveEatAfterAdd();
+            }
+        }
+        
         private Vector3 GetDirection()
         {
             var position = leader.localPosition;
-
+            
             switch (_movementState)
             {
                 case MoveState.MoveUp:
-                    
                     return new Vector3(position.x, position.y + stepLength);
 
                 case MoveState.MoveDown:
@@ -106,17 +131,26 @@ namespace MainScripts
             return new Vector3();
         }
 
+        private void MoveEatAfterAdd()
+        {
+            Random rnd = new Random();
+            var posY = rnd.Next(-6, 6);
+            var posX = rnd.Next(-8, 13);
+
+            eat.transform.localPosition = new Vector3(posX * 100, posY * 100, 0);
+        }
+        
         private void Move()
         {
             var pos = leader.localPosition;
             leader.localPosition = GetDirection();
             foreach (var element in slaveElement)
             {
-                var newLoc = element.localPosition;
-                element.localPosition = pos;
+                var newLoc = element.transform.localPosition;
+                element.transform.localPosition = pos;
                 pos = newLoc;
             }
-            
+            AddBodyAndEat(pos);
         }
     }
 }
