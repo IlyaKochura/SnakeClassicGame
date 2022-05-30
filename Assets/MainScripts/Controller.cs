@@ -52,6 +52,8 @@ namespace MainScripts
                 Move();
                 _time = 1;
             }
+
+            TemporarySwitch();
         }
 
         void Direction(int dir)
@@ -188,6 +190,67 @@ namespace MainScripts
             {
                 leader.localPosition = new Vector3(-800, leader.localPosition.y, 0);
             }
+        }
+
+        private void TemporarySwitch()
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                _movementState = MoveState.MoveUp;
+            }
+            
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                _movementState = MoveState.MoveDown;
+            }
+            
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                _movementState = MoveState.MoveLeft;
+            }
+            
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                _movementState = MoveState.MoveRight;
+            }
+
+            DirectionTemporarySwitch();
+        }
+        
+        void DirectionTemporarySwitch()
+        {
+            var mov = _movementState;
+            
+            switch (_movementState)
+            {
+                case MoveState.MoveUp:
+                    if (_movementState == MoveState.MoveDown)
+                    {
+                        return;
+                    }
+                    break;
+                case MoveState.MoveDown:
+                    if (_movementState == MoveState.MoveUp)
+                    {
+                        return;
+                    }
+                    break;
+                case MoveState.MoveLeft:
+                    if (_movementState == MoveState.MoveRight)
+                    {
+                        return;
+                    }
+                    break;
+                case MoveState.MoveRight:
+                    if (_movementState == MoveState.MoveLeft)
+                    {
+                        return;
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            _movementState = mov;
         }
     }
 }
