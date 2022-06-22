@@ -43,17 +43,8 @@ namespace MainScripts
 
         void Update()
         {
-            if (_time > 0)
-            {
-                _time -= Time.deltaTime * speed;
-            }
-            else
-            {
-                Move();
-                _time = 1;
-            }
-
-            TemporarySwitch();
+            
+            Move();
         }
 
         void Direction(int dir)
@@ -118,26 +109,23 @@ namespace MainScripts
             score.text = Convert.ToString(slaveElement.Count);
         }
         
-        private Vector3 GetDirection()
+        private void GetDirection(Transform lTransform)
         {
-            var position = leader.localPosition;
-            
             switch (_movementState)
             {
                 case MoveState.MoveUp:
-                    return new Vector3(position.x, position.y + stepLength);
-
+                    lTransform.Translate(Vector3.up * stepLength * Time.deltaTime) ;
+                    break;
                 case MoveState.MoveDown:
-                    return new Vector3(position.x, position.y - stepLength);
-
+                    lTransform.Translate(Vector3.down * stepLength * Time.deltaTime);
+                    break;
                 case MoveState.MoveLeft:
-                    return new Vector3(position.x - stepLength, position.y);
-
+                    lTransform.Translate(Vector3.left * stepLength * Time.deltaTime);
+                    break;
                 case MoveState.MoveRight:
-                    return new Vector3(position.x + stepLength, position.y);
+                    lTransform.Translate(Vector3.right * stepLength * Time.deltaTime);
+                    break;
             }
-
-            return new Vector3();
         }
 
         private void MoveEatAfterAdd()
@@ -151,8 +139,8 @@ namespace MainScripts
         
         private void Move()
         {
+            GetDirection(leader);
             var pos = leader.localPosition;
-            leader.localPosition = GetDirection();
             foreach (var element in slaveElement)
             {
                 var newLoc = element.transform.localPosition;
@@ -192,65 +180,42 @@ namespace MainScripts
             }
         }
 
-        private void TemporarySwitch()
-        {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                _movementState = MoveState.MoveUp;
-            }
-            
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                _movementState = MoveState.MoveDown;
-            }
-            
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                _movementState = MoveState.MoveLeft;
-            }
-            
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                _movementState = MoveState.MoveRight;
-            }
-
-            DirectionTemporarySwitch();
-        }
         
-        void DirectionTemporarySwitch()
-        {
-            var mov = _movementState;
-            
-            switch (_movementState)
-            {
-                case MoveState.MoveUp:
-                    if (_movementState == MoveState.MoveDown)
-                    {
-                        return;
-                    }
-                    break;
-                case MoveState.MoveDown:
-                    if (_movementState == MoveState.MoveUp)
-                    {
-                        return;
-                    }
-                    break;
-                case MoveState.MoveLeft:
-                    if (_movementState == MoveState.MoveRight)
-                    {
-                        return;
-                    }
-                    break;
-                case MoveState.MoveRight:
-                    if (_movementState == MoveState.MoveLeft)
-                    {
-                        return;
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            _movementState = mov;
-        }
+        
+        // void DirectionTemporarySwitch()
+        // {
+        //     var mov = _movementState;
+        //     
+        //     switch (_movementState)
+        //     {
+        //         case MoveState.MoveUp:
+        //             if (_movementState == MoveState.MoveDown)
+        //             {
+        //                 return;
+        //             }
+        //             break;
+        //         case MoveState.MoveDown:
+        //             if (_movementState == MoveState.MoveUp)
+        //             {
+        //                 return;
+        //             }
+        //             break;
+        //         case MoveState.MoveLeft:
+        //             if (_movementState == MoveState.MoveRight)
+        //             {
+        //                 return;
+        //             }
+        //             break;
+        //         case MoveState.MoveRight:
+        //             if (_movementState == MoveState.MoveLeft)
+        //             {
+        //                 return;
+        //             }
+        //             break;
+        //         default:
+        //             throw new ArgumentOutOfRangeException();
+        //     }
+        //     _movementState = mov;
+        // }
     }
 }
