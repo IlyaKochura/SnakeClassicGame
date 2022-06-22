@@ -19,6 +19,7 @@ namespace MainScripts
         [SerializeField] private GameObject bodyPrefab;
         [SerializeField] private Transform leaderBodySpawn;
         [SerializeField] private Text score;
+        [SerializeField] private SpawnBodyButtonScript spawnButton;
         private float _time = 1;
         private MoveState _movementState = MoveState.MoveUp;
 
@@ -38,6 +39,7 @@ namespace MainScripts
                 buttonScripts[i].click = () => Direction(id);
             }
 
+            buttonScripts[5].click = () => AddBodyAndEat(leaderBodySpawn.localPosition);
             buttonScripts[4].click = () => Restart();
         }
 
@@ -88,25 +90,22 @@ namespace MainScripts
         private void AddBodyAndEat(Vector3 position)
         {
             
-            for (int i = 0; i < slaveElement.Count; i++)
-            {
-                if (leader.localPosition == slaveElement[i].transform.localPosition)
-                {
-                    endGameTitle.SetActive(true);
-                    Time.timeScale = 0;
-                }   
-            }
+            // for (int i = 0; i < slaveElement.Count; i++)
+            // {
+            //     if (leader.localPosition == slaveElement[i].transform.localPosition)
+            //     {
+            //         endGameTitle.SetActive(true);
+            //         Time.timeScale = 0;
+            //     }   
+            // }
             
-            if (leader.localPosition == eat.transform.localPosition)
-            {
                 var bodyElement = Instantiate(bodyPrefab, leaderBodySpawn);
                 slaveElement.Add(bodyElement);
                 bodyElement.transform.localPosition = position;
 
                 MoveEatAfterAdd();
-            }
-            
-            score.text = Convert.ToString(slaveElement.Count);
+
+                score.text = Convert.ToString(slaveElement.Count);
         }
         
         private void GetDirection(Transform lTransform)
@@ -147,7 +146,6 @@ namespace MainScripts
                 element.transform.localPosition = pos;
                 pos = newLoc;
             }
-            AddBodyAndEat(pos);
             MovingEdgesScene();
         }
 
