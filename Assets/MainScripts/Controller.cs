@@ -45,7 +45,15 @@ namespace MainScripts
 
         void Update()
         {
-            
+            if (_time > 0)
+            {
+                _time -= Time.deltaTime * speed;
+            }
+            else
+            {
+                _pos = leader.localPosition;
+                _time = 1;
+            }
             Move();
         }
 
