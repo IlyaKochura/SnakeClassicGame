@@ -20,7 +20,6 @@ namespace MainScripts
         [SerializeField] private Transform leaderBodySpawn;
         [SerializeField] private Text score;
         [SerializeField] private SpawnBodyButtonScript spawnButton;
-        private Vector3 _leaderPos;
         private float _time = 1;
         private MoveState _movementState = MoveState.MoveUp;
 
@@ -46,18 +45,8 @@ namespace MainScripts
 
         void Update()
         {
-            if (_time > 0)
-            {
-                _time -= Time.deltaTime * speed;
-            }
-            else
-            {
-                _leaderPos = PositionLeaderPerONeSecond();
-                _time = 1;
-            }
-            GetDirection(leader);
-            Move();
             
+            Move();
         }
 
         void Direction(int dir)
@@ -149,11 +138,13 @@ namespace MainScripts
         
         private void Move()
         {
+            GetDirection(leader);
+            var pos = leader.localPosition;
             foreach (var element in slaveElement)
             {
                 var newLoc = element.transform.localPosition;
-                Vector3.MoveTowards(element.transform.localPosition, _leaderPos, 100);
-                _leaderPos = newLoc;
+                element.transform.localPosition = pos;
+                pos = newLoc;
             }
             MovingEdgesScene();
         }
@@ -185,13 +176,6 @@ namespace MainScripts
             {
                 leader.localPosition = new Vector3(-800, leader.localPosition.y, 0);
             }
-        }
-
-        private Vector3 PositionLeaderPerONeSecond()
-        {
-            var leaderPos = leader.localPosition;
-            return leaderPos;
-
         }
 
         
