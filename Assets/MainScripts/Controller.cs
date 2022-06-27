@@ -20,8 +20,10 @@ namespace MainScripts
         [SerializeField] private Transform leaderBodySpawn;
         [SerializeField] private Text score;
         [SerializeField] private SpawnBodyButtonScript spawnButton;
+        private int _id;
         private float _time = 1;
         private MoveState _movementState = MoveState.MoveUp;
+        private Axis _axis = Axis.AxisY;
 
         private enum MoveState
         {
@@ -31,12 +33,18 @@ namespace MainScripts
             MoveRight
         }
 
+        private enum Axis
+        {
+            AxisY,
+            AxisX
+        }
+
         void Start()
         {
             for (int i = 0; i < buttonScripts.Count; i++)
             {
                 var id = i;
-                buttonScripts[i].click = () => Direction(id);
+                buttonScripts[i].click = () => Transmitter(id);
             }
 
             buttonScripts[5].click = () => AddBodyAndEat(leaderBodySpawn.localPosition);
@@ -45,15 +53,23 @@ namespace MainScripts
 
         void Update()
         {
-            if (_time > 0)
+            switch (_axis)
             {
-                _time -= Time.deltaTime * speed;
-            }
-            else
-            {
-               
-                _time = 1;
-            }
+                case Axis.AxisY :
+                    if (leader.localPosition.y % 100 > -1 && leader.localPosition.y % 100 < 1)
+                    {
+                        Direction(_id);
+                    }
+                    break;
+                
+                case Axis.AxisX :
+                    if (leader.localPosition.x % 100 > -1 && leader.localPosition.x % 100 < 1)
+                    {
+                        Direction(_id);
+                    }
+                    break;
+            }   
+            
             Move();
         }
 
@@ -120,81 +136,48 @@ namespace MainScripts
         {
             int posX;
             int posY;
-            float posDifference;
             switch (_movementState)
             {
                 case MoveState.MoveUp:
                     lTransform.Translate(Vector3.up * stepLength * Time.deltaTime);
-                    if (leader.localPosition.x > 0 && leader.localPosition.x % 100 != 0)
+                    if (leader.localPosition.x % 100 != 0)
                     {
+                        _axis = Axis.AxisY;
                         posX = Convert.ToInt32(Math.Floor(leader.localPosition.x / 100) * 100);
-                        var pos = leader.localPosition.x;
-                        posDifference = pos - posX;
-                        leader.localPosition = new Vector3(posX, leader.localPosition.y + posDifference);
+                        leader.localPosition = new Vector3(posX, leader.localPosition.y);
                         
-                    }
-
-                    if (leader.localPosition.x < 0 && leader.localPosition.x % 100 != 0)
-                    {
-                        posX = Convert.ToInt32(Math.Ceiling(leader.localPosition.x / 100) * 100);
-                        var pos = leader.localPosition.x;
-                        posDifference = pos - posX;
-                        leader.localPosition = new Vector3(posX, leader.localPosition.y + posDifference);
                     }
                     break;
                 
                 case MoveState.MoveDown:
                     lTransform.Translate(Vector3.down * stepLength * Time.deltaTime);
-                    if (leader.localPosition.x > 0 && leader.localPosition.x % 100 != 0)
+                    if (leader.localPosition.x % 100 != 0)
                     {
+                        _axis = Axis.AxisY;
                        posX = Convert.ToInt32(Math.Floor(leader.localPosition.x / 100) * 100);
-                       var pos = leader.localPosition.x;
-                       posDifference = pos - posX;
-                       leader.localPosition = new Vector3(posX, leader.localPosition.y - posDifference);
+                       leader.localPosition = new Vector3(posX, leader.localPosition.y);
                     }
-                    if (leader.localPosition.x < 0 && leader.localPosition.x % 100 != 0)
-                    {
-                        posX = Convert.ToInt32(Math.Ceiling(leader.localPosition.x / 100) * 100);
-                        var pos = leader.localPosition.x;
-                        posDifference = pos - posX;
-                        leader.localPosition = new Vector3(posX, leader.localPosition.y - posDifference);
-                    }
+                    
                     break;
                 
                 case MoveState.MoveLeft:
                     lTransform.Translate(Vector3.left * stepLength * Time.deltaTime);
-                    if (leader.localPosition.y > 0 && leader.localPosition.y % 100 != 0)
+                    if (leader.localPosition.y % 100 != 0)
                     {
+                        _axis = Axis.AxisX;
                         posY = Convert.ToInt32(Math.Floor(leader.localPosition.y / 100) * 100);
-                        var pos = leader.localPosition.y;
-                        posDifference = pos - posY;
-                        leader.localPosition = new Vector3(leader.localPosition.x - posDifference, posY);
+                        leader.localPosition = new Vector3(leader.localPosition.x, posY);
                     }
-
-                    if ( leader.localPosition.y < 0 && leader.localPosition.y % 100 != 0)
-                    {
-                        posY = Convert.ToInt32(Math.Ceiling(leader.localPosition.y / 100) * 100);
-                        var pos = leader.localPosition.y;
-                        posDifference = pos - posY;
-                        leader.localPosition = new Vector3(leader.localPosition.x - posDifference, posY);
-                    }
+                    
                     break;
                 
                 case MoveState.MoveRight:
                     lTransform.Translate(Vector3.right * stepLength * Time.deltaTime);
-                    if (leader.localPosition.y > 0 && leader.localPosition.y % 100 != 0)
+                    if (leader.localPosition.y % 100 != 0)
                     {
+                        _axis = Axis.AxisX;
                         posY = Convert.ToInt32(Math.Floor(leader.localPosition.y / 100) * 100);
-                        var pos = leader.localPosition.y;
-                        posDifference = pos - posY;
-                        leader.localPosition = new Vector3(leader.localPosition.x + posDifference, posY);
-                    }
-                    if ( leader.localPosition.y < 0 && leader.localPosition.y % 100 != 0)
-                    {
-                        posY = Convert.ToInt32(Math.Ceiling(leader.localPosition.y / 100) * 100);
-                        var pos = leader.localPosition.y;
-                        posDifference = pos - posY;
-                        leader.localPosition = new Vector3(leader.localPosition.x - posDifference, posY);
+                        leader.localPosition = new Vector3(leader.localPosition.x, posY);
                     }
                     break;
             }
@@ -252,8 +235,13 @@ namespace MainScripts
             }
         }
 
-        
-        
+        private void Transmitter(int id)
+        {
+            _id = id;
+        }
+
+
+
         // void DirectionTemporarySwitch()
         // {
         //     var mov = _movementState;
