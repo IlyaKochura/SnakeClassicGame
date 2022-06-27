@@ -51,7 +51,7 @@ namespace MainScripts
             }
             else
             {
-                _pos = leader.localPosition;
+               
                 _time = 1;
             }
             Move();
