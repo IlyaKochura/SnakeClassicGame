@@ -147,7 +147,7 @@ namespace MainScripts
                     lTransform.Translate(Vector3.down * stepLength * Time.deltaTime);
                     if (leader.localPosition.x > 0 && leader.localPosition.x % 100 != 0)
                     {
-                       posX = Convert.ToInt32(Math.Round(leader.localPosition.x / 100) * 100);
+                       posX = Convert.ToInt32(Math.Floor(leader.localPosition.x / 100) * 100);
                        var pos = leader.localPosition.x;
                        posDifference = pos - posX;
                        leader.localPosition = new Vector3(posX, leader.localPosition.y - posDifference);
@@ -165,7 +165,7 @@ namespace MainScripts
                     lTransform.Translate(Vector3.left * stepLength * Time.deltaTime);
                     if (leader.localPosition.y > 0 && leader.localPosition.y % 100 != 0)
                     {
-                        posY = Convert.ToInt32(Math.Round(leader.localPosition.y / 100) * 100);
+                        posY = Convert.ToInt32(Math.Floor(leader.localPosition.y / 100) * 100);
                         var pos = leader.localPosition.y;
                         posDifference = pos - posY;
                         leader.localPosition = new Vector3(leader.localPosition.x - posDifference, posY);
@@ -184,7 +184,7 @@ namespace MainScripts
                     lTransform.Translate(Vector3.right * stepLength * Time.deltaTime);
                     if (leader.localPosition.y > 0 && leader.localPosition.y % 100 != 0)
                     {
-                        posY = Convert.ToInt32(Math.Round(leader.localPosition.y / 100) * 100);
+                        posY = Convert.ToInt32(Math.Floor(leader.localPosition.y / 100) * 100);
                         var pos = leader.localPosition.y;
                         posDifference = pos - posY;
                         leader.localPosition = new Vector3(leader.localPosition.x + posDifference, posY);
@@ -194,7 +194,7 @@ namespace MainScripts
                         posY = Convert.ToInt32(Math.Ceiling(leader.localPosition.y / 100) * 100);
                         var pos = leader.localPosition.y;
                         posDifference = pos - posY;
-                        leader.localPosition = new Vector3(leader.localPosition.x + posDifference, posY);
+                        leader.localPosition = new Vector3(leader.localPosition.x - posDifference, posY);
                     }
                     break;
             }
@@ -216,6 +216,7 @@ namespace MainScripts
             foreach (var element in slaveElement)
             {
                 var newLoc = element.transform.localPosition;
+                element.transform.localPosition = new Vector3(newLoc.x + 100, newLoc.y + 100);
                 element.transform.localPosition = pos;
                 pos = newLoc;
             }
