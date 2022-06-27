@@ -118,19 +118,41 @@ namespace MainScripts
         
         private void GetDirection(Transform lTransform)
         {
+            int posX;
+            int posY;
             switch (_movementState)
             {
                 case MoveState.MoveUp:
-                    lTransform.Translate(Vector3.up * stepLength * Time.deltaTime) ;
+                    lTransform.Translate(Vector3.up * stepLength * Time.deltaTime);
+                    if (leader.localPosition.x % 100 != 0)
+                    {
+                        posX = Convert.ToInt32(Math.Round(leader.localPosition.x / 100) * 100);
+                        leader.localPosition = new Vector3(posX, leader.localPosition.y);
+                    }
                     break;
                 case MoveState.MoveDown:
                     lTransform.Translate(Vector3.down * stepLength * Time.deltaTime);
+                    if (leader.localPosition.x % 100 != 0)
+                    {
+                       posX = Convert.ToInt32(Math.Round(leader.localPosition.x / 100) * 100);
+                       leader.localPosition = new Vector3(posX, leader.localPosition.y);
+                    }
                     break;
                 case MoveState.MoveLeft:
                     lTransform.Translate(Vector3.left * stepLength * Time.deltaTime);
+                    if (leader.localPosition.y % 100 != 0)
+                    {
+                        posY = Convert.ToInt32(Math.Round(leader.localPosition.y / 100) * 100);
+                        leader.localPosition = new Vector3(leader.localPosition.x, posY);
+                    }
                     break;
                 case MoveState.MoveRight:
                     lTransform.Translate(Vector3.right * stepLength * Time.deltaTime);
+                    if (leader.localPosition.y % 100 != 0)
+                    {
+                        posY = Convert.ToInt32(Math.Round(leader.localPosition.y / 100) * 100);
+                        leader.localPosition = new Vector3(leader.localPosition.x, posY);
+                    }
                     break;
             }
         }
