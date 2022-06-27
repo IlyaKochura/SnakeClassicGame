@@ -143,7 +143,7 @@ namespace MainScripts
                     if (leader.localPosition.x % 100 != 0)
                     {
                         _axis = Axis.AxisY;
-                        posX = Convert.ToInt32(Math.Floor(leader.localPosition.x / 100) * 100);
+                        posX = Convert.ToInt32(Math.Round(leader.localPosition.x / 100) * 100);
                         leader.localPosition = new Vector3(posX, leader.localPosition.y);
                         
                     }
@@ -154,7 +154,7 @@ namespace MainScripts
                     if (leader.localPosition.x % 100 != 0)
                     {
                         _axis = Axis.AxisY;
-                       posX = Convert.ToInt32(Math.Floor(leader.localPosition.x / 100) * 100);
+                       posX = Convert.ToInt32(Math.Round(leader.localPosition.x / 100) * 100);
                        leader.localPosition = new Vector3(posX, leader.localPosition.y);
                     }
                     
@@ -165,7 +165,7 @@ namespace MainScripts
                     if (leader.localPosition.y % 100 != 0)
                     {
                         _axis = Axis.AxisX;
-                        posY = Convert.ToInt32(Math.Floor(leader.localPosition.y / 100) * 100);
+                        posY = Convert.ToInt32(Math.Round(leader.localPosition.y / 100) * 100);
                         leader.localPosition = new Vector3(leader.localPosition.x, posY);
                     }
                     
@@ -176,7 +176,7 @@ namespace MainScripts
                     if (leader.localPosition.y % 100 != 0)
                     {
                         _axis = Axis.AxisX;
-                        posY = Convert.ToInt32(Math.Floor(leader.localPosition.y / 100) * 100);
+                        posY = Convert.ToInt32(Math.Round(leader.localPosition.y / 100) * 100);
                         leader.localPosition = new Vector3(leader.localPosition.x, posY);
                     }
                     break;
