@@ -120,38 +120,81 @@ namespace MainScripts
         {
             int posX;
             int posY;
+            float posDifference;
             switch (_movementState)
             {
                 case MoveState.MoveUp:
                     lTransform.Translate(Vector3.up * stepLength * Time.deltaTime);
-                    if (leader.localPosition.x % 100 != 0)
+                    if (leader.localPosition.x > 0 && leader.localPosition.x % 100 != 0)
                     {
-                        posX = Convert.ToInt32(Math.Round(leader.localPosition.x / 100) * 100);
-                        leader.localPosition = new Vector3(posX, leader.localPosition.y);
+                        posX = Convert.ToInt32(Math.Floor(leader.localPosition.x / 100) * 100);
+                        var pos = leader.localPosition.x;
+                        posDifference = pos - posX;
+                        leader.localPosition = new Vector3(posX, leader.localPosition.y + posDifference);
+                        
+                    }
+
+                    if (leader.localPosition.x < 0 && leader.localPosition.x % 100 != 0)
+                    {
+                        posX = Convert.ToInt32(Math.Ceiling(leader.localPosition.x / 100) * 100);
+                        var pos = leader.localPosition.x;
+                        posDifference = pos - posX;
+                        leader.localPosition = new Vector3(posX, leader.localPosition.y + posDifference);
                     }
                     break;
+                
                 case MoveState.MoveDown:
                     lTransform.Translate(Vector3.down * stepLength * Time.deltaTime);
-                    if (leader.localPosition.x % 100 != 0)
+                    if (leader.localPosition.x > 0 && leader.localPosition.x % 100 != 0)
                     {
                        posX = Convert.ToInt32(Math.Round(leader.localPosition.x / 100) * 100);
-                       leader.localPosition = new Vector3(posX, leader.localPosition.y);
+                       var pos = leader.localPosition.x;
+                       posDifference = pos - posX;
+                       leader.localPosition = new Vector3(posX, leader.localPosition.y - posDifference);
+                    }
+                    if (leader.localPosition.x < 0 && leader.localPosition.x % 100 != 0)
+                    {
+                        posX = Convert.ToInt32(Math.Ceiling(leader.localPosition.x / 100) * 100);
+                        var pos = leader.localPosition.x;
+                        posDifference = pos - posX;
+                        leader.localPosition = new Vector3(posX, leader.localPosition.y - posDifference);
                     }
                     break;
+                
                 case MoveState.MoveLeft:
                     lTransform.Translate(Vector3.left * stepLength * Time.deltaTime);
-                    if (leader.localPosition.y % 100 != 0)
+                    if (leader.localPosition.y > 0 && leader.localPosition.y % 100 != 0)
                     {
                         posY = Convert.ToInt32(Math.Round(leader.localPosition.y / 100) * 100);
-                        leader.localPosition = new Vector3(leader.localPosition.x, posY);
+                        var pos = leader.localPosition.y;
+                        posDifference = pos - posY;
+                        leader.localPosition = new Vector3(leader.localPosition.x - posDifference, posY);
+                    }
+
+                    if ( leader.localPosition.y < 0 && leader.localPosition.y % 100 != 0)
+                    {
+                        posY = Convert.ToInt32(Math.Ceiling(leader.localPosition.y / 100) * 100);
+                        var pos = leader.localPosition.y;
+                        posDifference = pos - posY;
+                        leader.localPosition = new Vector3(leader.localPosition.x - posDifference, posY);
                     }
                     break;
+                
                 case MoveState.MoveRight:
                     lTransform.Translate(Vector3.right * stepLength * Time.deltaTime);
-                    if (leader.localPosition.y % 100 != 0)
+                    if (leader.localPosition.y > 0 && leader.localPosition.y % 100 != 0)
                     {
                         posY = Convert.ToInt32(Math.Round(leader.localPosition.y / 100) * 100);
-                        leader.localPosition = new Vector3(leader.localPosition.x, posY);
+                        var pos = leader.localPosition.y;
+                        posDifference = pos - posY;
+                        leader.localPosition = new Vector3(leader.localPosition.x + posDifference, posY);
+                    }
+                    if ( leader.localPosition.y < 0 && leader.localPosition.y % 100 != 0)
+                    {
+                        posY = Convert.ToInt32(Math.Ceiling(leader.localPosition.y / 100) * 100);
+                        var pos = leader.localPosition.y;
+                        posDifference = pos - posY;
+                        leader.localPosition = new Vector3(leader.localPosition.x + posDifference, posY);
                     }
                     break;
             }
