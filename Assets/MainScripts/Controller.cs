@@ -10,10 +10,9 @@ namespace MainScripts
     public class Controller : MonoBehaviour
     {
         [SerializeField] private List<ButtonScript> buttonScripts;
-        [SerializeField] private int speed = 1;
         [SerializeField] private List<GameObject> slaveElement;
         [SerializeField] private Transform leader;
-        [SerializeField] private float stepLength;
+        [SerializeField] private float speed;
         [SerializeField] private GameObject endGameTitle;
         [SerializeField] private GameObject eat;
         [SerializeField] private GameObject bodyPrefab;
@@ -21,7 +20,6 @@ namespace MainScripts
         [SerializeField] private Text score;
         [SerializeField] private SpawnBodyButtonScript spawnButton;
         private int _id;
-        private float _time = 1;
         private MoveState _movementState = MoveState.MoveUp;
         private Axis _axis = Axis.AxisY;
 
@@ -68,8 +66,7 @@ namespace MainScripts
                         Direction(_id);
                     }
                     break;
-            }   
-            
+            }
             Move();
         }
 
@@ -108,22 +105,10 @@ namespace MainScripts
             }
             _movementState = i;
         }
-
         
-
         private void AddBodyAndEat(Vector3 position)
         {
-            
-            // for (int i = 0; i < slaveElement.Count; i++)
-            // {
-            //     if (leader.localPosition == slaveElement[i].transform.localPosition)
-            //     {
-            //         endGameTitle.SetActive(true);
-            //         Time.timeScale = 0;
-            //     }   
-            // }
-            
-                var bodyElement = Instantiate(bodyPrefab, leaderBodySpawn);
+            var bodyElement = Instantiate(bodyPrefab, leaderBodySpawn);
                 slaveElement.Add(bodyElement);
                 bodyElement.transform.localPosition = position;
 
@@ -139,18 +124,17 @@ namespace MainScripts
             switch (_movementState)
             {
                 case MoveState.MoveUp:
-                    lTransform.Translate(Vector3.up * stepLength * Time.deltaTime);
+                    lTransform.Translate(Vector3.up * speed * Time.deltaTime);
                     if (leader.localPosition.x % 100 != 0)
                     {
                         _axis = Axis.AxisY;
                         posX = Convert.ToInt32(Math.Round(leader.localPosition.x / 100) * 100);
                         leader.localPosition = new Vector3(posX, leader.localPosition.y);
-                        
                     }
                     break;
                 
                 case MoveState.MoveDown:
-                    lTransform.Translate(Vector3.down * stepLength * Time.deltaTime);
+                    lTransform.Translate(Vector3.down * speed * Time.deltaTime);
                     if (leader.localPosition.x % 100 != 0)
                     {
                         _axis = Axis.AxisY;
@@ -161,7 +145,7 @@ namespace MainScripts
                     break;
                 
                 case MoveState.MoveLeft:
-                    lTransform.Translate(Vector3.left * stepLength * Time.deltaTime);
+                    lTransform.Translate(Vector3.left * speed * Time.deltaTime);
                     if (leader.localPosition.y % 100 != 0)
                     {
                         _axis = Axis.AxisX;
@@ -172,7 +156,7 @@ namespace MainScripts
                     break;
                 
                 case MoveState.MoveRight:
-                    lTransform.Translate(Vector3.right * stepLength * Time.deltaTime);
+                    lTransform.Translate(Vector3.right * speed * Time.deltaTime);
                     if (leader.localPosition.y % 100 != 0)
                     {
                         _axis = Axis.AxisX;
@@ -199,19 +183,18 @@ namespace MainScripts
             foreach (var element in slaveElement)
             {
                 var newLoc = element.transform.localPosition;
-                element.transform.localPosition = new Vector3(newLoc.x + 100, newLoc.y + 100);
                 element.transform.localPosition = pos;
                 pos = newLoc;
             }
             MovingEdgesScene();
         }
-
+        
         private void Restart()
         {
             SceneManager.LoadScene(0);
             Time.timeScale = 1;
         }
-
+        
         private void MovingEdgesScene()
         {
             if (leader.localPosition.y > 600)
@@ -234,48 +217,10 @@ namespace MainScripts
                 leader.localPosition = new Vector3(-800, leader.localPosition.y, 0);
             }
         }
-
+        
         private void Transmitter(int id)
         {
             _id = id;
         }
-
-
-
-        // void DirectionTemporarySwitch()
-        // {
-        //     var mov = _movementState;
-        //     
-        //     switch (_movementState)
-        //     {
-        //         case MoveState.MoveUp:
-        //             if (_movementState == MoveState.MoveDown)
-        //             {
-        //                 return;
-        //             }
-        //             break;
-        //         case MoveState.MoveDown:
-        //             if (_movementState == MoveState.MoveUp)
-        //             {
-        //                 return;
-        //             }
-        //             break;
-        //         case MoveState.MoveLeft:
-        //             if (_movementState == MoveState.MoveRight)
-        //             {
-        //                 return;
-        //             }
-        //             break;
-        //         case MoveState.MoveRight:
-        //             if (_movementState == MoveState.MoveLeft)
-        //             {
-        //                 return;
-        //             }
-        //             break;
-        //         default:
-        //             throw new ArgumentOutOfRangeException();
-        //     }
-        //     _movementState = mov;
-        // }
     }
 }
