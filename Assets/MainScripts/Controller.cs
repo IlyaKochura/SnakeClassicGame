@@ -11,6 +11,7 @@ namespace MainScripts
     {
         [SerializeField] private List<ButtonScript> buttonScripts;
         [SerializeField] private List<GameObject> slaveElement;
+        [SerializeField] private List<Vector3> slaveElementPosition;
         [SerializeField] private Transform leader;
         [SerializeField] private float speed;
         [SerializeField] private GameObject endGameTitle;
@@ -18,7 +19,7 @@ namespace MainScripts
         [SerializeField] private GameObject bodyPrefab;
         [SerializeField] private Transform leaderBodySpawn;
         [SerializeField] private Text score;
-        [SerializeField] private SpawnBodyButtonScript spawnButton;
+        [SerializeField] private float sidelenght;
         private int _id;
         private MoveState _movementState = MoveState.MoveUp;
         private Axis _axis = Axis.AxisY;
@@ -44,7 +45,8 @@ namespace MainScripts
                 var id = i;
                 buttonScripts[i].click = () => Transmitter(id);
             }
-
+            
+            slaveElementPosition.Add(leader.position);
             buttonScripts[5].click = () => AddBodyAndEat(leaderBodySpawn.localPosition);
             buttonScripts[4].click = () => Restart();
         }
@@ -108,8 +110,9 @@ namespace MainScripts
         
         private void AddBodyAndEat(Vector3 position)
         {
-            var bodyElement = Instantiate(bodyPrefab, leaderBodySpawn);
+            var bodyElement = Instantiate(bodyPrefab, slaveElementPosition[slaveElement.Count], Quaternion.identity, leaderBodySpawn);
                 slaveElement.Add(bodyElement);
+                slaveElementPosition.Add(bodyElement.transform.localPosition);
                 bodyElement.transform.localPosition = position;
 
                 MoveEatAfterAdd();
@@ -179,11 +182,19 @@ namespace MainScripts
         private void Move()
         {
             GetDirection(leader, _movementState);
-            var pos = leader.localPosition;
-            foreach (var element in slaveElement)
+            var distance = (leader.localPosition - slaveElementPosition[0]).magnitude;
+            if (distance > sidelenght)
             {
-                GetDirection(element.transform, _movementState);
+                slaveElementPosition.Insert(0, leader.localPosition);
+                slaveElementPosition.RemoveAt(slaveElementPosition.Count - 1);
             }
+
+            for (int i = 0; i < slaveElement.Count; i++)
+            {
+                slaveElement[i].transform.localPosition =
+                    Vector3.Lerp(slaveElementPosition[i + 1], slaveElementPosition[i], distance / sidelenght);
+            }
+            
             MovingEdgesScene();
         }
         
