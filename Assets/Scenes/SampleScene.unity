@@ -256,10 +256,9 @@ MonoBehaviour:
   - {fileID: 511558817}
   - {fileID: 2094079597}
   - {fileID: 918186814}
-  speed: 3
   slaveElement: []
   leader: {fileID: 5743649652018297397}
-  stepLength: 300
+  speed: 300
   endGameTitle: {fileID: 1133247816}
   eat: {fileID: 7344364317455506920}
   bodyPrefab: {fileID: 8924021094975699698, guid: 8ab1e59a6e540684ebce73d90c5b03c6, type: 3}

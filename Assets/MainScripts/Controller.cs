@@ -117,51 +117,51 @@ namespace MainScripts
                 score.text = Convert.ToString(slaveElement.Count);
         }
         
-        private void GetDirection(Transform lTransform)
+        private void GetDirection(Transform lTransform, MoveState moveState)
         {
             int posX;
             int posY;
-            switch (_movementState)
+            switch (moveState)
             {
                 case MoveState.MoveUp:
                     lTransform.Translate(Vector3.up * speed * Time.deltaTime);
-                    if (leader.localPosition.x % 100 != 0)
+                    if (lTransform.localPosition.x % 100 != 0)
                     {
                         _axis = Axis.AxisY;
-                        posX = Convert.ToInt32(Math.Round(leader.localPosition.x / 100) * 100);
-                        leader.localPosition = new Vector3(posX, leader.localPosition.y);
+                        posX = Convert.ToInt32(Math.Round(lTransform.localPosition.x / 100) * 100);
+                        lTransform.localPosition = new Vector3(posX, lTransform.localPosition.y);
                     }
                     break;
                 
                 case MoveState.MoveDown:
                     lTransform.Translate(Vector3.down * speed * Time.deltaTime);
-                    if (leader.localPosition.x % 100 != 0)
+                    if (lTransform.localPosition.x % 100 != 0)
                     {
                         _axis = Axis.AxisY;
-                       posX = Convert.ToInt32(Math.Round(leader.localPosition.x / 100) * 100);
-                       leader.localPosition = new Vector3(posX, leader.localPosition.y);
+                       posX = Convert.ToInt32(Math.Round(lTransform.localPosition.x / 100) * 100);
+                       lTransform.localPosition = new Vector3(posX, lTransform.localPosition.y);
                     }
                     
                     break;
                 
                 case MoveState.MoveLeft:
                     lTransform.Translate(Vector3.left * speed * Time.deltaTime);
-                    if (leader.localPosition.y % 100 != 0)
+                    if (lTransform.localPosition.y % 100 != 0)
                     {
                         _axis = Axis.AxisX;
-                        posY = Convert.ToInt32(Math.Round(leader.localPosition.y / 100) * 100);
-                        leader.localPosition = new Vector3(leader.localPosition.x, posY);
+                        posY = Convert.ToInt32(Math.Round(lTransform.localPosition.y / 100) * 100);
+                        lTransform.localPosition = new Vector3(lTransform.localPosition.x, posY);
                     }
                     
                     break;
                 
                 case MoveState.MoveRight:
                     lTransform.Translate(Vector3.right * speed * Time.deltaTime);
-                    if (leader.localPosition.y % 100 != 0)
+                    if (lTransform.localPosition.y % 100 != 0)
                     {
                         _axis = Axis.AxisX;
-                        posY = Convert.ToInt32(Math.Round(leader.localPosition.y / 100) * 100);
-                        leader.localPosition = new Vector3(leader.localPosition.x, posY);
+                        posY = Convert.ToInt32(Math.Round(lTransform.localPosition.y / 100) * 100);
+                        lTransform.localPosition = new Vector3(lTransform.localPosition.x, posY);
                     }
                     break;
             }
@@ -178,13 +178,11 @@ namespace MainScripts
         
         private void Move()
         {
-            GetDirection(leader);
+            GetDirection(leader, _movementState);
             var pos = leader.localPosition;
             foreach (var element in slaveElement)
             {
-                var newLoc = element.transform.localPosition;
-                element.transform.localPosition = pos;
-                pos = newLoc;
+                GetDirection(element.transform, _movementState);
             }
             MovingEdgesScene();
         }
