@@ -259,13 +259,13 @@ MonoBehaviour:
   slaveElement: []
   slaveElementPosition: []
   leader: {fileID: 5743649652018297397}
-  speed: 300
+  speed: 400
   endGameTitle: {fileID: 1133247816}
   eat: {fileID: 7344364317455506920}
   bodyPrefab: {fileID: 8924021094975699698, guid: 8ab1e59a6e540684ebce73d90c5b03c6, type: 3}
   leaderBodySpawn: {fileID: 164794540}
   score: {fileID: 2124645551}
-  sidelenght: 100
+  sidelenght: 90
 --- !u!114 &132092278
 MonoBehaviour:
   m_ObjectHideFlags: 0
