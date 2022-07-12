@@ -20,6 +20,7 @@ namespace MainScripts
         [SerializeField] private Transform leaderBodySpawn;
         [SerializeField] private Text score;
         [SerializeField] private float sidelenght;
+        [SerializeField] private float mb;
         private int _id;
         private MoveState _movementState = MoveState.MoveUp;
         private Axis _axis = Axis.AxisY;
@@ -47,7 +48,7 @@ namespace MainScripts
             }
             
             slaveElementPosition.Add(leader.position);
-            buttonScripts[5].click = () => AddBodyAndEat(leaderBodySpawn.localPosition);
+            // buttonScripts[5].click = () => AddBodyAndEat();
             buttonScripts[4].click = () => Restart();
         }
 
@@ -69,6 +70,8 @@ namespace MainScripts
                     }
                     break;
             }
+
+            
             Move();
         }
 
@@ -108,16 +111,21 @@ namespace MainScripts
             _movementState = i;
         }
         
-        private void AddBodyAndEat(Vector3 position)
+        private void AddBodyAndEat()
         {
-            var bodyElement = Instantiate(bodyPrefab, slaveElementPosition[slaveElement.Count], Quaternion.identity, leaderBodySpawn);
+            var eatPosY = eat.transform.localPosition.y;
+            var eatPosX = eat.transform.localPosition.x;
+            if ( (leader.localPosition.x - eatPosX > -mb && leader.localPosition.x - eatPosX < mb) &&
+                 (leader.localPosition.y - eatPosY > -mb && leader.localPosition.y - eatPosY < mb))
+            {
+                var bodyElement = Instantiate(bodyPrefab, slaveElementPosition[slaveElement.Count], Quaternion.identity,
+                    leaderBodySpawn);
                 slaveElement.Add(bodyElement);
                 slaveElementPosition.Add(bodyElement.transform.localPosition);
-                bodyElement.transform.localPosition = position;
-
                 MoveEatAfterAdd();
+            }
 
-                score.text = Convert.ToString(slaveElement.Count);
+            score.text = Convert.ToString(slaveElement.Count);
         }
         
         private void GetDirection(Transform lTransform, MoveState moveState)
@@ -183,18 +191,19 @@ namespace MainScripts
         {
             GetDirection(leader, _movementState);
             var distance = (leader.localPosition - slaveElementPosition[0]).magnitude;
-            if (distance > sidelenght)
-            {
-                slaveElementPosition.Insert(0, leader.localPosition);
-                slaveElementPosition.RemoveAt(slaveElementPosition.Count - 1);
-            }
+             if (distance > sidelenght)
+             {
+                 slaveElementPosition.Insert(0, leader.localPosition);
+                 slaveElementPosition.RemoveAt(slaveElementPosition.Count - 1);
+             }
 
             for (int i = 0; i < slaveElement.Count; i++)
             {
                 slaveElement[i].transform.localPosition =
                     Vector3.Lerp(slaveElementPosition[i + 1], slaveElementPosition[i], distance / sidelenght);
             }
-            
+
+            AddBodyAndEat();
             MovingEdgesScene();
         }
         
@@ -206,22 +215,22 @@ namespace MainScripts
         
         private void MovingEdgesScene()
         {
-            if (leader.localPosition.y > 600)
+            if (leader.localPosition.y > 620)
             {
                 leader.localPosition = new Vector3(leader.localPosition.x, -600, 0);
             }
 
-            if (leader.localPosition.y < -600)
+            if (leader.localPosition.y < -620)
             {
                 leader.localPosition = new Vector3(leader.localPosition.x, 600, 0);
             }
 
-            if (leader.localPosition.x < -800)
+            if (leader.localPosition.x < -820)
             {
                 leader.localPosition = new Vector3(1300, leader.localPosition.y, 0);
             }
             
-            if (leader.localPosition.x > 1300)
+            if (leader.localPosition.x > 1320)
             {
                 leader.localPosition = new Vector3(-800, leader.localPosition.y, 0);
             }
